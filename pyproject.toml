@@ -1,9 +1,11 @@
+
 [project]
 name = "celestial-mechanics"
 version = "0.1.0"
-requires-python = ">= 3.14.7"
+description = "Newtonian N-body gravitational simulations using velocity Verlet integration"
+requires-python = ">=3.14"
 dependencies = [
     "numpy",
-    "scipy",
-    "matplotlib"
+    "matplotlib",
+    "pillow",
 ]
