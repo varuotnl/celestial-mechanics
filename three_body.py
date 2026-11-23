@@ -92,6 +92,7 @@ plt.axis("equal")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("results/three_body.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 # Energy conservation
@@ -109,6 +110,7 @@ plt.ylabel("Relative energy error")
 plt.title("Three-body energy conservation")
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("results/three_body_energy.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 print(f"Orbital period: {period:.2f} seconds")

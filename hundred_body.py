@@ -137,6 +137,7 @@ for ax in axes:
     ax.grid(True)
 
 plt.tight_layout()
+plt.savefig("results/hundred_body.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 # --------------------------------------------------
@@ -168,6 +169,7 @@ plt.title("100-body simulation: Energy conservation")
 
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("results/hundred_body_energy.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 # --------------------------------------------------

@@ -107,6 +107,7 @@ plt.title("Velocity Verlet timestep convergence")
 plt.grid(True, which="both")
 plt.legend()
 plt.tight_layout()
+plt.savefig("results/timestep_convergence.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 # Calculate observed error reduction

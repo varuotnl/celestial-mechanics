@@ -110,4 +110,5 @@ axes[1].grid(True)
 axes[1].legend()
 
 plt.tight_layout()
+plt.savefig("results/two_body_trajectories.png", dpi=300, bbox_inches="tight")
 plt.show()

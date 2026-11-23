@@ -1,5 +1,5 @@
 
-# Celestial Mechanics — Python Project
+# Celestial Mechanics - Python Project
 
 Final project for Introduction to Programming in Python,
 University of Twente, Fall 2026.

@@ -94,6 +94,7 @@ plt.xlabel("Time (s)")
 plt.ylabel("Relative energy error")
 plt.title("Energy conservation - Velocity Verlet")
 plt.grid(True)
+plt.savefig("results/two_body.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 # Print numerical results
