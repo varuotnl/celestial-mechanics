@@ -1,19 +1,27 @@
 
 import numpy as np
 
-# Gravitational constant (m^3 kg^-1 s^-2)
 G = 6.67430e-11
 
 
-def gravitational_force(position1, position2, mass1, mass2):
-    """Calculate the gravitational force acting on body 1 due to body 2."""
+def gravitational_force(
+    position1, position2, mass1, mass2, softening=0.0
+):
+    """Calculate gravitational force on body 1 due to body 2."""
 
     displacement = position2 - position1
-    distance = np.linalg.norm(displacement)
+    distance_squared = np.dot(displacement, displacement)
 
-    if distance == 0:
-        raise ValueError("Two bodies cannot occupy the same position.")
+    if distance_squared == 0 and softening == 0:
+        raise ValueError("Two bodies occupy the same position.")
 
-    force = G * mass1 * mass2 * displacement / distance**3
+    softened_distance = (
+        distance_squared + softening**2
+    ) ** 1.5
+
+    force = (
+        G * mass1 * mass2
+        * displacement / softened_distance
+    )
 
     return force

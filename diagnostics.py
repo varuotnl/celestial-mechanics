@@ -4,7 +4,7 @@ import numpy as np
 from gravity import G
 
 
-def total_energy(positions, velocities, masses):
+def total_energy(positions, velocities, masses, softening=0.0):
     """Calculate total kinetic and gravitational potential energy."""
 
     kinetic = 0.5 * np.sum(
@@ -16,12 +16,15 @@ def total_energy(positions, velocities, masses):
 
     for i in range(n):
         for j in range(i + 1, n):
-            distance = np.linalg.norm(
-                positions[j] - positions[i]
-            )
-            if distance == 0:
+            displacement = positions[j] - positions[i]
+            distance_squared = np.dot(displacement, displacement)
+
+            if distance_squared == 0 and softening == 0:
                 raise ValueError("Two bodies occupy the same position.")
 
-            potential -= G * masses[i] * masses[j] / distance
+            potential -= (
+                G * masses[i] * masses[j]
+                / np.sqrt(distance_squared + softening**2)
+            )
 
     return kinetic + potential

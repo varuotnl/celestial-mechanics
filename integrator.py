@@ -4,7 +4,9 @@ import numpy as np
 from gravity import gravitational_force
 
 
-def calculate_accelerations(positions, masses):
+def calculate_accelerations(
+    positions, masses, softening=0.0
+):
     """Calculate gravitational acceleration for every body."""
 
     n = len(masses)
@@ -12,8 +14,13 @@ def calculate_accelerations(positions, masses):
 
     for i in range(n):
         for j in range(i + 1, n):
+
             force = gravitational_force(
-                positions[i], positions[j], masses[i], masses[j]
+                positions[i],
+                positions[j],
+                masses[i],
+                masses[j],
+                softening
             )
 
             accelerations[i] += force / masses[i]
@@ -22,10 +29,14 @@ def calculate_accelerations(positions, masses):
     return accelerations
 
 
-def verlet_step(positions, velocities, masses, dt):
-    """Advance all bodies by one velocity Verlet timestep."""
+def verlet_step(
+    positions, velocities, masses, dt, softening=0.0
+):
+    """Advance the system by one velocity Verlet timestep."""
 
-    old_accelerations = calculate_accelerations(positions, masses)
+    old_accelerations = calculate_accelerations(
+        positions, masses, softening
+    )
 
     new_positions = (
         positions
@@ -33,7 +44,9 @@ def verlet_step(positions, velocities, masses, dt):
         + 0.5 * old_accelerations * dt**2
     )
 
-    new_accelerations = calculate_accelerations(new_positions, masses)
+    new_accelerations = calculate_accelerations(
+        new_positions, masses, softening
+    )
 
     new_velocities = (
         velocities
