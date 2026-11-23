@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from diagnostics import total_energy
 from integrator import verlet_step
 
 # Simulation parameters (SI units)
@@ -14,34 +15,42 @@ N_STEPS = 2000
 masses = np.array([MASS_1, MASS_2])
 total_mass = masses.sum()
 
-# Circular relative orbital speed and period
+# Calculate circular orbital speed and period
 relative_speed = np.sqrt(G * total_mass / SEPARATION)
 period = 2 * np.pi * SEPARATION / relative_speed
 dt = period / N_STEPS
 
-# Both bodies orbit their common centre of mass
+# Initial positions around the centre of mass
 positions = np.array([
     [-SEPARATION / 2, 0.0],
     [SEPARATION / 2, 0.0]
 ])
 
+# Initial velocities
 velocities = np.array([
     [0.0, -relative_speed / 2],
     [0.0, relative_speed / 2]
 ])
 
-# Store trajectories
+# Arrays to store trajectories and energies
 trajectories = np.zeros((N_STEPS + 1, 2, 2))
-trajectories[0] = positions
+energies = np.zeros(N_STEPS + 1)
 
-# Run simulation
+trajectories[0] = positions
+energies[0] = total_energy(positions, velocities, masses)
+
+# Run the simulation
 for step in range(N_STEPS):
     positions, velocities = verlet_step(
         positions, velocities, masses, dt
     )
-    trajectories[step + 1] = positions
 
-# Plot trajectories
+    trajectories[step + 1] = positions
+    energies[step + 1] = total_energy(
+        positions, velocities, masses
+    )
+
+# Plot 1: Orbital trajectories
 plt.figure(figsize=(7, 7))
 
 plt.plot(
@@ -56,7 +65,12 @@ plt.plot(
     label="Body 2"
 )
 
-plt.scatter(0, 0, color="black", marker="+", label="Centre of mass")
+plt.scatter(
+    0, 0,
+    color="black",
+    marker="+",
+    label="Centre of mass"
+)
 
 plt.xlabel("X position (m)")
 plt.ylabel("Y position (m)")
@@ -66,5 +80,26 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
+# Calculate relative energy error
+relative_error = (energies - energies[0]) / abs(energies[0])
+
+# Time values
+times = np.arange(N_STEPS + 1) * dt
+
+# Plot 2: Energy conservation
+plt.figure(figsize=(8, 4))
+plt.plot(times, relative_error)
+
+plt.xlabel("Time (s)")
+plt.ylabel("Relative energy error")
+plt.title("Energy conservation - Velocity Verlet")
+plt.grid(True)
+plt.show()
+
+# Print numerical results
 print(f"Orbital period: {period:.2f} seconds")
 print(f"Timestep: {dt:.2f} seconds")
+print(
+    f"Maximum relative energy error: "
+    f"{np.max(np.abs(relative_error)):.3e}"
+)
